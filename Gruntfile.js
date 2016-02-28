@@ -1,24 +1,24 @@
 module.exports = function(grunt) {
     'use strict';
+
+    var paths = {
+        index: 'app/index.html',
+        assets: 'app/assets/**/*',
+        css: 'app/css/*.css',
+        libs: [
+            'bower_components/phaser/build/phaser.min.js',
+            'bower_components/mosquitojs/dist/mosquito.min.js'
+        ],
+        js: [
+            'app/js/**/*.js'
+        ],
+        build: './build/'
+  };
+
     // Project configuration
     grunt.initConfig({
         // Metadata
         pkg : grunt.file.readJSON('package.json'),
-        banner :
-            '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-            '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-            '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-            '* Copyright (c) <%= grunt.template.today("yyyy") %> Jeff Brannon;' +
-            ' Licensed MIT */\n',
-        // Task configuration
-        concat : {
-          options : {banner : '<%= banner %>', stripBanners : true},
-          dist : {src : [ 'app/js/mosquito.js' ], dest : 'dist/mosquito.js'}
-        },
-        uglify : {
-          options : {banner : '<%= banner %>'},
-          dist : {src : '<%= concat.dist.dest %>', dest : 'dist/mosquito.min.js'}
-        },
         jshint : {
             options : {
                 node : true,
@@ -39,9 +39,12 @@ module.exports = function(grunt) {
                     window: false
                 }
             },
-            gruntfile : {src : 'gruntfile.js'},
-            beforeconcat: ['app/js/mosquito.js'],
-            afterconcat: ['dist/output.js']
+            all : {
+                src : [
+                    'gruntfile.js',
+                    paths.js
+                    ]
+            },
         },
         connect: {
             server: {
@@ -58,22 +61,90 @@ module.exports = function(grunt) {
                     livereload: true
                 },
                 files: [
-                    './app/index.html',
-                    './app/css/*.css',
-                    './app/js/**/8.js'
+                    paths.index,
+                    paths.css,
+                    paths.js
                 ]
             }
         },
-        nodeunit : {files : ['test/**/*_test.js' ]}
+        nodeunit : {files : ['test/**/*_test.js' ]},
+        clean: {
+            build: {
+                src: paths.build
+            }
+        },
+        copy: {
+            assets: {
+                src: paths.assets,
+                dest: paths.build + 'assets/',
+                filter: 'isFile',
+                expand: true,
+                flatten: true
+            },
+            libs: {
+                src: paths.libs,
+                dest: paths.build,
+                filter: 'isFile',
+                expand: true,
+                flatten: true
+            },
+        },
+        uglify: {
+            src: {
+                files: [{
+                    src: paths.js,
+                    dest: paths.build + 'main.min.js'
+                }]
+            }
+        },
+        cssmin: {
+            src: {
+                files: [{
+                    src: paths.css,
+                    dest: paths.build + 'main.min.css'
+                }]
+            }
+        },
+        processhtml: {
+            src: {
+                files: [{
+                    src: 'src/index.html',
+                    dest: paths.build + 'index.html'
+                }]
+            }
+        },
+        htmlmin: {
+            src: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: [{
+                    src: paths.build + 'index.html',
+                    dest: paths.build + 'index.html'
+                }]
+            }
+        }
     });
 
     // These plugins provide necessary tasks
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
 
-    grunt.registerTask('default', [ 'connect', 'watch' ]);
+    grunt.registerTask('default', [
+        'connect',
+        'watch'
+    ]);
+
+    grunt.registerTask('build', [
+        'clean',
+        'copy:assets',
+        'copy:libs',
+        'uglify',
+        'cssmin',
+        'processhtml',
+        'htmlmin'
+    ]);
 };
