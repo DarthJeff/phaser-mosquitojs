@@ -1,0 +1,13 @@
+{
+    "name": "phaser-mosquitojs",
+    "description": "Create Phaser games utilising dependency injection",
+    "license": "MIT",
+    "dependencies": {
+        "mosquitojs": "~0.1.0",
+        "phaser": "2.4.6"
+    },
+    "ignore": [
+        "node_modules",
+        "bower_components"
+    ]
+}
