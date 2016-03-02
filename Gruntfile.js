@@ -6,8 +6,8 @@ module.exports = function(grunt) {
         assets: 'app/assets/**/*',
         css: 'app/css/*.css',
         libs: [
-            'bower_components/phaser/build/phaser.min.js',
-            'bower_components/mosquitojs/dist/mosquito.min.js'
+            'app/bower_components/phaser/build/phaser.min.js',
+            'app/bower_components/mosquitojs/dist/mosquito.min.js'
         ],
         js: [
             'app/js/**/*.js'
@@ -63,7 +63,8 @@ module.exports = function(grunt) {
                 files: [
                     paths.index,
                     paths.css,
-                    paths.js
+                    paths.js,
+                    paths.assets
                 ]
             }
         },
