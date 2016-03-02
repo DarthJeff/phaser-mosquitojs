@@ -83,7 +83,7 @@ module.exports = function(grunt) {
             },
             libs: {
                 src: paths.libs,
-                dest: paths.build,
+                dest: paths.build + 'js/',
                 filter: 'isFile',
                 expand: true,
                 flatten: true
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
             src: {
                 files: [{
                     src: paths.js,
-                    dest: paths.build + 'main.min.js'
+                    dest: paths.build + 'js/main.min.js'
                 }]
             }
         },
@@ -101,14 +101,14 @@ module.exports = function(grunt) {
             src: {
                 files: [{
                     src: paths.css,
-                    dest: paths.build + 'main.min.css'
+                    dest: paths.build + 'css/main.min.css'
                 }]
             }
         },
         processhtml: {
             src: {
                 files: [{
-                    src: 'src/index.html',
+                    src: paths.index,
                     dest: paths.build + 'index.html'
                 }]
             }
@@ -128,10 +128,15 @@ module.exports = function(grunt) {
     });
 
     // These plugins provide necessary tasks
-    grunt.loadNpmTasks('grunt-contrib-nodeunit');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-processhtml');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
     grunt.registerTask('default', [
         'connect',
