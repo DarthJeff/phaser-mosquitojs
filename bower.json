@@ -3,7 +3,7 @@
     "description": "Create Phaser games utilising dependency injection",
     "license": "MIT",
     "dependencies": {
-        "mosquitojs": "~0.1.1",
+        "mosquitojs": "~0.1.2",
         "phaser": "2.4.6"
     },
     "ignore": [
