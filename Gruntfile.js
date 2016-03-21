@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         js: [
             'app/js/**/*.js'
         ],
-        build: './build/'
+        build: './dist/'
   };
 
     // Project configuration
@@ -46,42 +46,12 @@ module.exports = function(grunt) {
                     ]
             },
         },
-        connect: {
-            server: {
-                options: {
-                    port: 8000,
-                    hostname: '0.0.0.0',
-                    base: 'app'
-                }
-            }
-        },
-        watch: {
-            src: {
-                options: {
-                    livereload: true
-                },
-                files: [
-                    paths.index,
-                    paths.css,
-                    paths.js,
-                    paths.assets
-                ]
-            }
-        },
-        nodeunit : {files : ['test/**/*_test.js' ]},
         clean: {
             build: {
                 src: paths.build
             }
         },
         copy: {
-            assets: {
-                src: paths.assets,
-                dest: paths.build + 'assets/',
-                filter: 'isFile',
-                expand: true,
-                flatten: true
-            },
             libs: {
                 src: paths.libs,
                 dest: paths.build + 'js/',
@@ -94,35 +64,7 @@ module.exports = function(grunt) {
             src: {
                 files: [{
                     src: paths.js,
-                    dest: paths.build + 'js/main.min.js'
-                }]
-            }
-        },
-        cssmin: {
-            src: {
-                files: [{
-                    src: paths.css,
-                    dest: paths.build + 'css/main.min.css'
-                }]
-            }
-        },
-        processhtml: {
-            src: {
-                files: [{
-                    src: paths.index,
-                    dest: paths.build + 'index.html'
-                }]
-            }
-        },
-        htmlmin: {
-            src: {
-                options: {
-                    removeComments: true,
-                    collapseWhitespace: true
-                },
-                files: [{
-                    src: paths.build + 'index.html',
-                    dest: paths.build + 'index.html'
+                    dest: paths.build + 'js/phaserGame.module.min.js'
                 }]
             }
         }
@@ -130,27 +72,13 @@ module.exports = function(grunt) {
 
     // These plugins provide necessary tasks
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-processhtml');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
-    grunt.registerTask('default', [
-        'connect',
-        'watch'
-    ]);
-
-    grunt.registerTask('build', [
+    grunt.registerTask('dist', [
         'clean',
-        'copy:assets',
         'copy:libs',
-        'uglify',
-        'cssmin',
-        'processhtml',
-        'htmlmin'
+        'uglify'
     ]);
 };
