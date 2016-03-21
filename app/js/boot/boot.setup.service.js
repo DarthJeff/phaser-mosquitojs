@@ -1,8 +1,8 @@
 'use strict';
 
-mosquito.module('boot').service('bootSetupService', function(){
-    this.setupDesktop = function(game){
-        game.scale.pageAlignHorizontally = true;
+mosquito.module('boot').service('bootSetupService', ['$game', function($game){
+    this.setupDesktop = function(){
+        $game.scale.pageAlignHorizontally = true;
     }
     this.setupMobile = function(game){
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -14,4 +14,4 @@ mosquito.module('boot').service('bootSetupService', function(){
         game.scale.pageAlignHorizontally = true;
         game.scale.setScreenSize(true);
     }
-});
+}]);
